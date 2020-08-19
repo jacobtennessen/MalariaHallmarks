@@ -5,7 +5,7 @@ use Getopt::Std;
 
 ##### ##### ##### ##### #####
 
-use vars qw($opt_m $opt_v $opt_o $opt_p $opt_f $opt_q $opt_t $opt_r $opt_l);
+use vars qw($opt_m $opt_v $opt_o $opt_p $opt_f $opt_q $opt_t $opt_r $opt_l $opt_s);
 
 # Usage
 my $usage = "
@@ -40,18 +40,19 @@ Usage: perl FstPerSite.pl options
   -q  minimum MAF for export to candidate list [default = 0]
   -r  maximum MAF for export to candidate list [default = 0.5]
   -l  comma-delimited list of chromosomes to examine (default = X,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22)
+  -s  number of lines to output at once [default = entire chromosome]
 ";
 
 #############
 
-getopts('m:v:o:p:f:t:q:r:l:');
+getopts('m:v:o:p:f:t:q:r:l:s:');
 
 die $usage unless ($opt_m);
 die $usage unless ($opt_o);
 die $usage unless ($opt_p);
 die $usage unless ($opt_v);
 
-my ($metafolder, $outfile, @allpops, $fstthresh, $fstmax, $minfreq, $maxfreq, $vcfname, @chroms);
+my ($metafolder, $outfile, @allpops, $fstthresh, $fstmax, $minfreq, $maxfreq, $vcfname, $outputsize, @chroms);
 
 $metafolder = $opt_m;
 
@@ -94,6 +95,10 @@ if (defined $opt_r) {
   $maxfreq = $opt_r;
 } else {
   $maxfreq = 0.5;
+}
+
+if (defined $opt_s) {
+  $outputsize = $opt_s;
 }
 
 my @allsamples;
@@ -222,20 +227,34 @@ foreach my $c (@chroms) {
       }
       $seensnps +=1;
     }
+    if ((defined $outputsize)&&((scalar (@outliers)) >= $outputsize)) {
+      my $outliers = join "\n", @outliers;
+      @outliers = ();
+      unless ( open(OFT, ">>$outfile") ) {
+          print "Cannot open file \"$outfile\" to write to!!\n\n";
+          exit;
+      }
+      print OFT "\n$outliers";
+      close (OFT);
+    }
   }
   
   close (IN);
   
-  my $outliers = join "\n", @outliers;
+  if ((scalar (@outliers)) >= 1) {
   
-  @outliers = ();
+    my $outliers = join "\n", @outliers;
+    
+    @outliers = ();
+    
+    unless ( open(OFC, ">>$outfile") ) {
+        print "Cannot open file \"$outfile\" to write to!!\n\n";
+        exit;
+    }
+    print OFC "\n$outliers";
+    close (OFC);
   
-  unless ( open(OFC, ">>$outfile") ) {
-      print "Cannot open file \"$outfile\" to write to!!\n\n";
-      exit;
   }
-  print OFC "\n$outliers";
-  close (OFC);
   
   print "Chrom $c complete; $seensnps SNPs seen.\n";
 
@@ -320,3 +339,4 @@ sub Fstmulti {
    
     return $Fst;
 }
+
