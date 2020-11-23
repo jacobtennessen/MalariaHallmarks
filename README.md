@@ -3,7 +3,7 @@ Scripts for detecting signatures of natural selection characteristic of human ge
 
 These scrips start with phased genotype data in vcf format as in the 1000 Genomes data, with a separate file for each chromosome. Other variations of the vcf format may not work.
 
-To calculate 🍡 for a test of Divergent Haplotypes:
+To calculate Dng (aka 🍡) for a test of Divergent Haplotypes:
 
 1.	Use GetDango.pl on vcf data.
 
@@ -11,7 +11,7 @@ e.g. perl GetDango.pl -v ALL.chr1_GRCh38.genotypes.vcf.gz -a 0,3,4,7,8,9 -o Dang
 
 #Do this for every vcf file.
 
-To calculate 🔱 for a test of Repeated Shifts:
+To calculate TR (aka 🔱) for a test of Repeated Shifts:
 
 1.	Use FstPerSite.pl on vcf data to calculate pairwise FST values between populations.
 
@@ -35,13 +35,13 @@ e.g. perl FindViableFstRegionsForTrident.pl -m /path/to/directory/ -a 0,3,4,7,8,
 
 e.g. perl GetTrident.pl -a Fst_Regions_50k_pops_1_2.txt -b Fst_Regions_50k_pops_2_3.txt -c Fst_Regions_50k_pops_1_3.txt -r 50000 -v Viable_Fst_Regions_50k.txt -o Trident_50k_pops_1_2_3.txt
 
-To calculate ⏸️ for a test of Arrested Sweep:
+To calculate ΠAHz (aka ⏸️) for a test of Arrested Sweep:
 
 1.	Use HetDifsPerRegion.pl on vcf data to calculate heterozygosity differences per pair of individuals
 
 e.g perl HetDifsPerRegion.pl -m /path/to/directory/ -a 0,3,4,7,8,9 -v ALL.chrCHROM_GRCh38.genotypes.vcf.gz -d Chrom_Data.txt -c 2 -o Het_Difs_Pop1
 
-#For efficiency, this can optionally by run on each vcf separately, or sets of vcfs, in parallel (e.g. if each chromosome is a separate vcf). As with 🔱, use the generic vcf name with CHROM placeholder.
+#For efficiency, this can optionally by run on each vcf separately, or sets of vcfs, in parallel (e.g. if each chromosome is a separate vcf). As with TR/🔱, use the generic vcf name with CHROM placeholder.
 
 2.	Use HetDifsPerSite.pl on vcf data to calculate average heterozygosity differences for each site.
 
