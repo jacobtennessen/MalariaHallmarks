@@ -68,5 +68,5 @@ e.g. perl FreqPerSite.pl -m /path/to/directory/ -p 27,28,29,30,31,32 -v ALL.chrC
 
 6.	Use GetPause.pl with the output of HetDifsPerSite.pl and FstMatrix.pl
 
-e.g. perl GetPause.pl -b Het_Difs_Pop1 -f Fst_Within_Ingroup.txt -i Fst_Within_Ingroup_Autosomes_Matrix.txt -e Freqs_outgroup.txt -m 10000 -x -o Pause_output.txt
+e.g. perl GetPause.pl -b Het_Difs_Pop1 -f Fst_Within_Ingroup.txt -i Fst_Within_Ingroup_Autosomes_Matrix.txt -d Chrom_Data.txt -e Freqs_outgroup.txt -m 10000 -x -o Pause_output.txt
 
